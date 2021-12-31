@@ -1,16 +1,18 @@
 package com.controller;
 
+import java.io.File;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bean.ResponseBean;
 import com.bean.UserBean;
@@ -69,4 +71,23 @@ public class UserController {
 		userDao.deleteUser(userId);
 		return userDao.getAllUsers();
 	}
+
+	// json --> @RequestBody
+	@PostMapping("/saveprofile") //
+	public UserBean saveProfile(@ModelAttribute("user") UserBean user, @RequestParam("profile") MultipartFile file) {
+
+		System.out.println(user.getFirstName());
+		System.out.println(file.getOriginalFilename());
+		try {
+			File f = new File("D:\\Tejas Shah\\Dropbox\\boot\\22-jan-club-spring-boot\\src\\main\\webapp\\images\\",
+					file.getOriginalFilename());
+			f.createNewFile();// blank
+			FileUtils.writeByteArrayToFile(f, file.getBytes());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return user;
+	}
+
 }
