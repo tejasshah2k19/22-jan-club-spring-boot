@@ -75,15 +75,21 @@ public class UserController {
 	// json --> @RequestBody
 	@PostMapping("/saveprofile") //
 	public UserBean saveProfile(@ModelAttribute("user") UserBean user, @RequestParam("profile") MultipartFile file) {
-
+		
+		long userId=userDao.addUser(user);//24 25 27 
+		
+		
 		System.out.println(user.getFirstName());
 		System.out.println(file.getOriginalFilename());
 		try {
-			File f = new File("D:\\Tejas Shah\\Dropbox\\boot\\22-jan-club-spring-boot\\src\\main\\webapp\\images\\",
+			File dir=new File("D:\\Tejas Shah\\Dropbox\\boot\\22-jan-club-spring-boot\\src\\main\\webapp\\images\\"+userId);//24
+			dir.mkdir();//folder
+			File f = new File(dir,
 					file.getOriginalFilename());
 			f.createNewFile();// blank
 			FileUtils.writeByteArrayToFile(f, file.getBytes());
 
+			user.setProfileUrl("\\images\\"+userId+"\\"+file.getOriginalFilename());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

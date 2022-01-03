@@ -6,6 +6,13 @@ public class UserBean {
 	String firstName;
 	String email, password;
 	int role;
+	String profileUrl;
+	public String getProfileUrl() {
+		return profileUrl;
+	}
+	public void setProfileUrl(String profileUrl) {
+		this.profileUrl = profileUrl;
+	}
 	public int getUserId() {
 		return userId;
 	}
