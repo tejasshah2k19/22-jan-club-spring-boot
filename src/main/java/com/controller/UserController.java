@@ -90,6 +90,12 @@ public class UserController {
 			FileUtils.writeByteArrayToFile(f, file.getBytes());
 
 			user.setProfileUrl("\\images\\"+userId+"\\"+file.getOriginalFilename());
+			user.setUserId((int)userId);
+			
+			
+			userDao.updateUserProfile(user);
+			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

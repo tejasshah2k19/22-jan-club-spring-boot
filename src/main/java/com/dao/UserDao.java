@@ -1,6 +1,7 @@
 package com.dao;
 
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,17 +26,19 @@ public class UserDao {
 
 		long userId=-1;
 		KeyHolder holder=new GeneratedKeyHolder();
-		   stmt.update(connection -> {
+
+		stmt.update(connection -> {
 		        PreparedStatement ps = connection
-		          .prepareStatement("insert into users (firstname,email,password,role) values (?,?,?,?)");
+		          .prepareStatement("insert into users (firstname,email,password,role) values (?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
 		          ps.setString(1, user.getFirstName());
 		          ps.setString(2, user.getEmail());
 		          ps.setString(3, user.getPassword());
 		          ps.setInt(4, user.getRole());
 		          return ps;
 		        }, holder);
-
-		        userId= (long) holder.getKey();
+				System.out.println("holder ==================> "+holder);
+				
+		        userId= (Integer) holder.getKeys().get("userid");
 		    	return userId;
 		    }
 //		stmt.update("insert into users (firstname,email,password,role) values (?,?,?,?)", user.getFirstName(),
@@ -53,6 +56,13 @@ public class UserDao {
 
 	public void deleteUser(int userId) {
 		stmt.update("delete from users where userid = ?", userId);
+	}
+
+
+
+
+	public void updateUserProfile(UserBean user) {
+		stmt.update("update users set profileurl = ? where userid = ?",user.getProfileUrl(),user.getUserId());
 	}
 
 	
